@@ -37,19 +37,6 @@ module.exports = {
       ]
     }
   },
-  configureWebpack: {
-    plugins: [
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          warnings: false,
-          parse: {},
-          compress: {},
-          ie8: false
-        },
-        parallel: true
-      })
-    ]
-  },
   chainWebpack(config) {
     config.module
       .rule('thread-loader')
