@@ -7,11 +7,12 @@ import SvgIcon from 'vue-svgicon'
 import '@/styles/element-variables.scss'
 import '@/styles/index.scss'
 
-
 import App from '@/App.vue'
 import '@/icons/components'
 // import '@/permission'
 import '@/pwa/register-service-worker'
+
+console.log(test)
 // import * as directives from '@/directives'
 // import * as filters from '@/filters'
 
