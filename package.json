@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "changelog": "conventional-changelog -p angular -i Changelog.md -s",
+    "changelog": "conventional-changelog -p angular -i changelog.md -s",
     "lint": "vue-cli-service lint",
     "test:unit": "jest --clearCache && vue-cli-service test:unit",
     "svg": "vsvg -s ./src/icons/svg -t ./src/icons/components --ext ts --es6"
