@@ -11,9 +11,9 @@ import App from '@/App.vue'
 import '@/icons/components'
 // import '@/permission'
 import '@/pwa/register-service-worker'
+import * as directives from '@/directives'
 
 console.log(test)
-// import * as directives from '@/directives'
 // import * as filters from '@/filters'
 
 Vue.use(ElementUI)
@@ -24,10 +24,10 @@ Vue.use(SvgIcon, {
   defaultHeight: '1em'
 })
 
-// // Register global directives
-// Object.keys(directives).forEach(key => {
-//   Vue.directive(key, (directives as { [key: string ]: DirectiveOptions })[key])
-// })
+// Register global directives
+Object.keys(directives).forEach(key => {
+  Vue.directive(key, (directives as { [key: string ]: DirectiveOptions })[key])
+})
 
 // // Register global filter functions
 // Object.keys(filters).forEach(key => {
