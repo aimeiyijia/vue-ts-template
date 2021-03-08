@@ -1,20 +1,18 @@
 <template>
   <div id="app">
+    <router-view />
     <service-worker-update-popup />
-    <test></test>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import ServiceWorkerUpdatePopup from '@/pwa/components/ServiceWorkerUpdatePopup.vue'
-import test from '@/views/test/test.tsx'
 
 @Component({
   name: 'App',
   components: {
-    ServiceWorkerUpdatePopup,
-    test
+    ServiceWorkerUpdatePopup
   }
 })
 export default class extends Vue {}

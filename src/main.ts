@@ -1,41 +1,42 @@
-import Vue, { DirectiveOptions } from 'vue'
+import Vue, { DirectiveOptions } from "vue";
 
-import 'normalize.css'
-import ElementUI from 'element-ui'
-import SvgIcon from 'vue-svgicon'
+import router from "@/router";
+import "normalize.css/normalize.css";
+import ElementUI from "element-ui";
+import SvgIcon from "vue-svgicon";
 
-import '@/styles/element-variables.scss'
-import '@/styles/index.scss'
+import "@/styles/element-variables.scss";
+import "@/styles/index.scss";
 
-import App from '@/App.vue'
-import '@/icons/components'
+import App from "@/App.vue";
+import "@/icons/components";
 // import '@/permission'
-import '@/pwa/register-service-worker'
-import * as directives from '@/directives'
+import "@/pwa/register-service-worker";
+import * as directives from "@/directives";
 
-console.log(test)
 // import * as filters from '@/filters'
 
-Vue.use(ElementUI)
+Vue.use(ElementUI);
 
 Vue.use(SvgIcon, {
-  tagName: 'svg-icon',
-  defaultWidth: '1em',
-  defaultHeight: '1em'
-})
+  tagName: "svg-icon",
+  defaultWidth: "1em",
+  defaultHeight: "1em"
+});
 
 // Register global directives
 Object.keys(directives).forEach(key => {
-  Vue.directive(key, (directives as { [key: string ]: DirectiveOptions })[key])
-})
+  Vue.directive(key, (directives as { [key: string]: DirectiveOptions })[key]);
+});
 
 // // Register global filter functions
 // Object.keys(filters).forEach(key => {
 //   Vue.filter(key, (filters as { [key: string ]: Function })[key])
 // })
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
-  render: (h) => h(App)
-}).$mount('#app')
+  router,
+  render: h => h(App)
+}).$mount("#app");
