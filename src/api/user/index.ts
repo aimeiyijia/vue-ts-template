@@ -1,4 +1,4 @@
-import { $post, $get, $put } from '@/http/index'
+import { $post, $get } from '@/http/index'
 export function postOrgUserLogin(params: any) {
   return $post(
     '/user/webUserLogin',

@@ -1,0 +1,27 @@
+{
+  "baseURL": "http://192.168.2.177:8081",
+  "years": 5,
+  "uploadUrl": "http://139.199.81.59:9090/upload",
+  "uploadParam": {
+    "appID": "test1",
+    "uploadID": "",
+    "ftpDirPath": "temp"
+  },
+  "downloadUrl": "http://139.199.81.59:9090/download",
+  "authUrl": "pages/rlsbdl/rlsbdl",
+  "qrcodeUrl": "http://139.199.81.59:9090/api/createwxaqrcode",
+  "title": "破产案件综合管理信息系统",
+  "certifyType": "ali",
+  "englishTitle": "Comprehensive management information system for bankruptcy cases",
+  "fydm": "320100",
+  "authentication": false,
+  "isTest": false,
+  "loginPath": "/desktop",
+  "themeStyle": "",
+  "showCreditorLogin": true,
+  "uploadFileSize": 50,
+  "desktopSpec": {
+    "hideMatter": [],
+    "hideMeeting": false
+  }
+}

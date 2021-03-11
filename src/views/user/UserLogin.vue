@@ -51,8 +51,8 @@
                 class="verify-input"
                 prefix-icon="test"
               />
-              <span class="verify-img">
-                <img v-if="loginForm.imgurl" :src="loginForm.imgurl" />
+              <span class="verify-img" @click="handleRefreshVerifyImg">
+                <img v-if="verifyImgUrl" :src="verifyImgUrl" />
               </span>
             </div>
           </el-form-item>
@@ -75,6 +75,14 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { AxiosError } from 'axios'
+import { getVerifyCode } from '@/api/user'
+import { uuid } from '@/utils/utility'
+const imgFail = require('@/assets/images/img-fail.png')
+
+interface IVerifyImg {
+  uuid: string
+}
 
 @Component({
   name: 'UserLogin'
@@ -83,9 +91,12 @@ export default class extends Vue {
   private loginForm = {
     username: '',
     password: '',
+    roleCode: 'glr',
     verifyCode: '',
-    imgurl: ''
+    uuid: uuid()
   };
+
+  private verifyImgUrl = '';
 
   private loginRules = {
     username: [{ required: true, message: '请输入账号', trigger: 'blur' }],
@@ -94,6 +105,34 @@ export default class extends Vue {
   };
 
   private remember = false;
+
+  created() {
+    this.setVerifyImg()
+  }
+
+  private handleRefreshVerifyImg() {
+    this.setVerifyImg()
+  }
+
+  private async setVerifyImg() {
+    const params = {
+      uuid: this.loginForm.uuid
+    }
+    this.verifyImgUrl = await this.getVerifyImg(params)
+  }
+
+  private async getVerifyImg(params: IVerifyImg): Promise<string> {
+    try {
+      const res = await getVerifyCode(params)
+      if (res.code === 200) {
+        return res.data
+      }
+      return imgFail
+    } catch (error) {
+      console.log(error)
+      return imgFail
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -196,17 +235,25 @@ export default class extends Vue {
       margin-top: 30px;
       .verify-form {
         .verify-input {
-          width: calc(100% - 120px);
+          width: calc(100% - 124px);
+          margin-right: 4px;
           vertical-align: middle;
         }
         .verify-img {
           display: inline-block;
-          // background: red;
           vertical-align: middle;
           width: 120px;
           height: 54px;
+          cursor: pointer;
           svg {
             font-size: 54px;
+          }
+          img {
+            width: 120px;
+            height: 50px;
+            position: relative;
+            top: 50%;
+            transform: translate(0%, -50%);
           }
         }
       }

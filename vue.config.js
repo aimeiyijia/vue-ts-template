@@ -1,6 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.

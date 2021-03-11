@@ -12,6 +12,7 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
+    "resolveJsonModule": true,
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
@@ -31,6 +32,11 @@
       "scripthost"
     ]
   },
+  "files": [
+    "./src/shims.d.ts",
+    "./src/vue-shims.d.ts",
+    "./src/shims-tsx.d.ts"
+  ],
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
