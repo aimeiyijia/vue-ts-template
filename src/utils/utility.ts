@@ -1,3 +1,4 @@
+// 放置工具函数
 // 获取uuid
 export function uuid() {
   const s: string[] = [];

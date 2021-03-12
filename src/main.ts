@@ -1,8 +1,7 @@
 import Vue, { DirectiveOptions } from 'vue'
 
-import config from '../public/config.json'
-
 import router from '@/router'
+import store from '@/store'
 import 'normalize.css/normalize.css'
 import ElementUI from 'element-ui'
 import SvgIcon from 'vue-svgicon'
@@ -16,6 +15,9 @@ import '@/icons/components'
 import '@/pwa/register-service-worker'
 import * as directives from '@/directives'
 
+import plugin from '@/plugin'
+
+
 // import * as filters from '@/filters'
 Vue.use(ElementUI)
 
@@ -24,6 +26,8 @@ Vue.use(SvgIcon, {
   defaultWidth: '1em',
   defaultHeight: '1em'
 })
+
+Vue.use(plugin)
 
 // 注册指令
 Object.keys(directives).forEach(key => {
@@ -35,14 +39,10 @@ Object.keys(directives).forEach(key => {
 //   Vue.filter(key, (filters as { [key: string ]: Function })[key])
 // })
 
-// 在Vue原型上挂载第三方插件
-// 全局配置项
-Object.defineProperty(Vue, '$gConfig', { value: config })
-
-
 Vue.config.productionTip = false
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')

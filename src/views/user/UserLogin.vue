@@ -13,16 +13,16 @@
         <el-form
           :model="loginForm"
           :rules="loginRules"
-          ref="ruleForm"
+          ref="loginForm"
           label-width="0px"
           class="login-form"
         >
-          <el-form-item prop="username">
+          <el-form-item prop="userName">
             <span class="formPrefix-icon">
               <svg-icon name="acc" />
             </span>
             <el-input
-              v-model="loginForm.username"
+              v-model="loginForm.userName"
               placeholder="请输入登录账号"
               class="login_input"
               prefix-icon="test"
@@ -61,7 +61,9 @@
           <span class="link">忘记密码</span>
         </div>
         <div class="login-main_btn">
-          <el-button class="btn" type="primary">登录</el-button>
+          <el-button class="btn" type="primary" @click="handleLogin"
+            >登录</el-button
+          >
         </div>
         <div class="login-main_assist">
           <el-checkbox v-model="remember">记住账号</el-checkbox>
@@ -76,8 +78,10 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { AxiosError } from 'axios'
-import { getVerifyCode } from '@/api/user'
+import { Form as ElForm, Input } from 'element-ui'
 import { uuid } from '@/utils/utility'
+import { UserModule } from '@/store/modules/user'
+import { $getVerifyCode, $postOrgUserLogin, $postUserByCode } from '@/api/user'
 const imgFail = require('@/assets/images/img-fail.png')
 
 interface IVerifyImg {
@@ -89,7 +93,7 @@ interface IVerifyImg {
 })
 export default class extends Vue {
   private loginForm = {
-    username: '',
+    userName: '',
     password: '',
     roleCode: 'glr',
     verifyCode: '',
@@ -99,7 +103,7 @@ export default class extends Vue {
   private verifyImgUrl = '';
 
   private loginRules = {
-    username: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+    userName: [{ required: true, message: '请输入账号', trigger: 'blur' }],
     password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
     verifyCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
   };
@@ -107,13 +111,90 @@ export default class extends Vue {
   private remember = false;
 
   created() {
+    this.getRememberUser()
     this.setVerifyImg()
+    UserModule.SetToken('123')
+    console.log(UserModule, '用户模块')
   }
 
+  // 点击登陆按钮
+  private handleLogin() {
+    (this.$refs.loginForm as ElForm).validate(async(valid: boolean) => {
+      if (valid) {
+        const loginRes = await this.login()
+        if (loginRes.code === 200) {
+          const { data } = loginRes
+          // 获取并存储token
+          UserModule.SetToken(data.token)
+          // 获取用户信息
+          const userinfo = await this.getUserByCode(data.userCode)
+          // 获取并存储用户信息
+          UserModule.SetUserInfo(userinfo)
+          // 获取并存储菜单
+          // 获取并存储权限
+          const { menus, pageResources } = userinfo.resourceDto
+        } else {
+          this.handleRefreshVerifyImg()
+          this.$message.warning(loginRes.msg)
+        }
+        return true
+      } else {
+        return false
+      }
+    })
+  }
+
+  // 登陆
+  private async login() {
+    try {
+      const params = this.loginForm
+      return await $postOrgUserLogin(this.$qs.stringify(params))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // 获取用户信息
+  private async getUserByCode(userCode: string) {
+    try {
+      return await $postUserByCode(
+        this.$qs.stringify({ userCode, roleCode: this.loginForm.roleCode })
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // 获取记住的用户
+  private getRememberUser() {
+    const savedAcc = localStorage.getItem('savedAcc')
+    if (savedAcc) {
+      const saveObj = JSON.parse(savedAcc)
+      if (saveObj.save === true) {
+        this.remember = true
+        this.loginForm.userName = saveObj.userName
+      }
+    }
+  }
+
+  // 勾选记住
+  private rememberUser() {
+    if (this.remember) {
+      localStorage.setItem(
+        'savedAcc',
+        JSON.stringify({ save: 'true', userName: this.loginForm.userName })
+      )
+    } else {
+      localStorage.removeItem('savedAcc')
+    }
+  }
+
+  // 刷新验证码
   private handleRefreshVerifyImg() {
     this.setVerifyImg()
   }
 
+  // 设置验证码
   private async setVerifyImg() {
     const params = {
       uuid: this.loginForm.uuid
@@ -121,9 +202,10 @@ export default class extends Vue {
     this.verifyImgUrl = await this.getVerifyImg(params)
   }
 
+  // 获取验证码
   private async getVerifyImg(params: IVerifyImg): Promise<string> {
     try {
-      const res = await getVerifyCode(params)
+      const res = await $getVerifyCode(params)
       if (res.code === 200) {
         return res.data
       }
